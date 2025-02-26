@@ -1,43 +1,54 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Calculator</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="script.js" defer></script>
-    <link rel="stylesheet" href="style.css">
-  </head>
 
-  <body>
-    <div id="container">
-      <div id="display"></div>
-      <div id="buttons">
+<head>
+  <title>Calculator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="display"></div>
+    <div id="buttons">
+      <div id="subbuttons">
         <button name="AC">AC</button>
-        <button name="backspace">⌫</button>
+        <button id="backspace" name="backspace">backspace</button>
         <button name="/">/</button>
+      </div>
 
+      <div id="subbuttons">
         <button name="7">7</button>
-        <button name="8">8</button>
         <button name="8">8</button>
         <button name="9">9</button>
         <button name="*">*</button>
+      </div>
 
+      <div id="subbuttons">
         <button name="4">4</button>
         <button name="5">5</button>
         <button name="6">6</button>
         <button name="-">-</button>
+      </div>
 
+      <div id="subbuttons">
         <button name="1">1</button>
         <button name="2">2</button>
         <button name="3">3</button>
         <button name="+">+</button>
+      </div>
 
-        <button name="0">0</button>
+      <div id="subbuttons">
+        <button id="zero" name="0">0</button>
         <button name=".">.</button>
         <button name="=">=</button>
-
       </div>
-      
+
     </div>
-  </body>
+
+  </div>
+</body>
+
 </html>

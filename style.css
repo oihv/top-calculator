@@ -1,0 +1,78 @@
+/*set box-sizing to border-box for all element, 
+* and make body and html spans the full size*/
+body,
+html {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/*set color palette as variable*/
+:root {
+  --cy1: #3674B5;
+  --cy2: #578FCA;
+  --cy3: #A1E3F9;
+  --cy4: #D1F8EF;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#container {
+  height: 70%;
+  width: 40%;
+  padding:10px;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--cy3);
+}
+
+#display {
+  height: 20%;
+  flex-grow: 3;
+  background-color: var(--cy4);
+
+  text-align:right;
+}
+
+#buttons {
+  flex-grow: 10;
+
+  margin-top: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#subbuttons {
+  flex-grow: 1;
+
+  width: 100%;
+
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  font-size: 24px;
+  flex-grow: 1;
+}
+
+#backspace, #zero {
+  flex-grow: 2;
+}
+
