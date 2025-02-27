@@ -57,7 +57,6 @@ function operate(op) {
       num1 /= num2;
       break;
   }
-  operated = true;
   lightenOp();
   num1 = num1.toFixed(2);
 }
@@ -89,8 +88,8 @@ function updateVar(input) {
   // Update op
   else if (input === "+" || input === "-" || input === "*" || input === "/") {
     if (op) { // If there's already operator, operate the previous calculation
-      num1 = operate(input);
-      op = "", num2 = ""; // Reset the operator
+      operate(op);
+      op = input, num2 = ""; // Reset the operator to the new op, num2 to undefined.
       return num1;
     }
     op = input;
@@ -99,7 +98,8 @@ function updateVar(input) {
   }
   else if (input === "=") {
     operate(op);
-    op = "", num2 = ""; // Reset the operator
+    op = "", num2 = ""; // Reset the operator, and num2
+    operated = true; // Flag to true, only when explicit operation was done
     return num1;
   }
 }
