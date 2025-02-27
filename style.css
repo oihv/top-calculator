@@ -27,10 +27,20 @@ body {
   align-items: center;
 }
 
+#container,
+#display,
+button {
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 0.5rem;
+  border-color: var(--cy1);
+}
+
 #container {
   height: 70%;
   width: 40%;
-  padding:10px;
+
+  padding: 10px;
 
   display: flex;
   flex-direction: column;
@@ -39,11 +49,20 @@ body {
 }
 
 #display {
-  height: 20%;
   flex-grow: 3;
   background-color: var(--cy4);
+  padding: 5px;
 
-  text-align:right;
+  text-align: right;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+span {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 #buttons {
@@ -72,7 +91,7 @@ button {
   flex-grow: 1;
 }
 
-#backspace, #zero {
+#backspace,
+#zero {
   flex-grow: 2;
 }
-
