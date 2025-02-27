@@ -1,4 +1,8 @@
 const display = document.querySelector("#display");
+const plus = document.querySelector("#plus");
+const minus = document.querySelector("#minus");
+const mult = document.querySelector("#mult");
+const divide = document.querySelector("#divide");
 
 function updateDisplay(toDisplay) {
   if (toDisplay === "unchanged") return; // Do not update
@@ -11,6 +15,30 @@ var operated = false;
 
 function resetVar() {
   num1 = "", num2 = "", op = "";
+}
+
+// Function to darken the button when the operator is selected
+let target;
+function darkenOp(op) {
+  switch (op) {
+    case "+":
+      target = plus;
+      break;
+    case "-":
+      target = minus;
+      break;
+    case "*":
+      target = mult;
+      break;
+    case "/":
+      target = divide;
+      break;
+  }
+  target.classList.add("darken");
+}
+
+function lightenOp() {
+  target.classList.remove("darken");
 }
 
 function operate(op) {
@@ -30,6 +58,7 @@ function operate(op) {
       break;
   }
   operated = true;
+  lightenOp();
   num1 = num1.toFixed(2);
 }
 
@@ -65,6 +94,7 @@ function updateVar(input) {
       return num1;
     }
     op = input;
+    darkenOp(op);
     return "unchanged";
   }
   else if (input === "=") {

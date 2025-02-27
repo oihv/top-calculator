@@ -95,3 +95,7 @@ button {
 #zero {
   flex-grow: 2;
 }
+
+.darken {
+  background-color: var(--cy2);
+}
