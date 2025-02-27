@@ -54,6 +54,8 @@ button {
   padding: 5px;
 
   text-align: right;
+  font-family: 'Times New Roman', Times, serif;
+  font-size:47px;
 
   display: flex;
   justify-content: flex-end;
