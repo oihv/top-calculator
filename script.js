@@ -15,6 +15,7 @@ var operated = false;
 
 function resetVar() {
   num1 = "", num2 = "", op = "";
+  lightenOp();
 }
 
 // Function to darken the button when the operator is selected
@@ -58,7 +59,9 @@ function operate(op) {
       break;
   }
   lightenOp();
-  num1 = num1.toFixed(2);
+  let rounded = num1.toFixed(2);
+  if (rounded == num1) return num1;
+  else return rounded;
 }
 
 function updateVar(input) {
@@ -94,6 +97,7 @@ function updateVar(input) {
     }
     op = input;
     darkenOp(op);
+    operated = false; // Flag to false, so second number can be filled
     return "unchanged";
   }
   else if (input === "=") {
