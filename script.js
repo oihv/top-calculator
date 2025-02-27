@@ -4,11 +4,10 @@ function updateDisplay(toDisplay) {
   if (toDisplay === "unchanged") return; // Do not update
   else if (toDisplay === "") display.textContent = "0";
   else display.textContent = `${toDisplay}`;
-
-    console.log(op);
 }
 
 var num1 = "", num2 = "", op = "";
+var operated = false;
 
 function resetVar() {
   num1 = "", num2 = "", op = "";
@@ -30,13 +29,18 @@ function operate(op) {
       num1 /= num2;
       break;
   }
-  op = ""; // Reset the operator
+  operated = true;
   num1 = num1.toFixed(2);
 }
 
 function updateVar(input) {
   // If the input is a number
   if (!isNaN(input)) {
+    if (operated === true) {
+      num1 = input;
+      operated = false;
+      return num1;
+    }
     // If theres no operator, update num1
     if (!op) {
       num1 += input; // Concatenate, since they are strings
@@ -57,6 +61,7 @@ function updateVar(input) {
   else if (input === "+" || input === "-" || input === "*" || input === "/") {
     if (op) { // If there's already operator, operate the previous calculation
       num1 = operate(input);
+      op = "", num2 = ""; // Reset the operator
       return num1;
     }
     op = input;
@@ -64,6 +69,7 @@ function updateVar(input) {
   }
   else if (input === "=") {
     operate(op);
+    op = "", num2 = ""; // Reset the operator
     return num1;
   }
 }
