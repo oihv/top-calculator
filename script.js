@@ -12,10 +12,12 @@ function updateDisplay(toDisplay) {
 
 var num1 = "", num2 = "", op = "";
 var operated = false;
+var dotted = false;
 
 function resetVar() {
   num1 = "", num2 = "", op = "";
   lightenOp();
+  lightenDot();
 }
 
 // Function to darken the button when the operator is selected
@@ -42,6 +44,22 @@ function lightenOp() {
   target.classList.remove("darken");
 }
 
+function addDot(num) {
+  dotted = true;
+  darkenDot();
+  if (num === "") num += "0";
+  return num += ".";
+}
+
+let dot = document.querySelector("#dot");
+function darkenDot() {
+  dot.classList.add("darken");
+}
+function lightenDot() {
+  dot.classList.remove("darken");
+  dotted = false;
+}
+
 function operate(op) {
   num1 = Number(num1), num2 = Number(num2);
   switch (op) {
@@ -59,26 +77,42 @@ function operate(op) {
       break;
   }
   lightenOp();
+  lightenDot();
   let rounded = num1.toFixed(2);
-  if (rounded == num1) return num1;
-  else return rounded;
+  if (rounded != num1) num1 = rounded; // If theres decimal value, round it to 2 decimal places
 }
 
 function updateVar(input) {
   // If the input is a number
-  if (!isNaN(input)) {
+  if (!isNaN(input) || input === ".") {
+    if (input === ".") {
+      if (dotted) return "unchanged";
+    }
+    // Reset the number, if an operation has just been finished
     if (operated === true) {
-      num1 = input;
       operated = false;
+      if (input === ".") {
+        num1 = addDot("");
+        return num1;
+      }
+      num1 = input;
       return num1;
     }
     // If theres no operator, update num1
     if (!op) {
+      if (input === ".") {
+        num1 = addDot(num1);
+        return num1;
+      }
       num1 += input; // Concatenate, since they are strings
       return num1;
     }
     // If there's already operator, update num2 instead
     else if (op) {
+      if (input === ".") {
+        num2 = addDot(num2);
+        return num2;
+      }
       num2 += input;
       return num2;
     }
