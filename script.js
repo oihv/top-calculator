@@ -13,6 +13,44 @@ function updateDisplay(toDisplay) {
 var num1 = "", num2 = "", op = "";
 var operated = false;
 var dotted = false;
+var toDisplay;
+var restored = false;
+
+class Snap {
+  constructor(num1, num2, op, operated, dotted, toDisplay) {
+    this.num1 = num1;
+    this.num2 = num2;
+    this.op = op;
+    this.operated = operated;
+    this.dotted = dotted;
+    this.toDisplay = toDisplay;
+  }
+}
+
+var snapshots = [];
+function restoreSnap() {
+  tempDot = dotted;
+  tempOp = operated;
+  let index = snapshots.length - 2;
+  if (index < 0) {
+    resetVar();
+    return;
+  } 
+  // Revert the variables
+  num1 = snapshots[index].num1;
+  num2 = snapshots[index].num2;
+  op = snapshots[index].op;
+  operated = snapshots[index].operated;
+  dotted = snapshots[index].dotted;
+  toDisplay = snapshots[index].toDisplay;
+  // Remove the last snapshot;
+  snapshots.pop();
+  // If buttons that relates to UI change, changed adjust
+  if (tempDot === false && dotted === true) darkenDot();
+  else if (tempDot === true && dotted === false) lightenDot();
+  if (tempOp === false && operated === true) darkenOp();
+  else if (tempOp === true && operated === false) lightenOp();
+}
 
 function resetVar() {
   num1 = "", num2 = "", op = "";
@@ -117,6 +155,12 @@ function updateVar(input) {
       return num2;
     }
   }
+  // Restore snapshot
+  else if (input === "backspace") {
+    restoreSnap();
+    restored = true;
+    return toDisplay;
+  }
   // Reset all var
   else if (input === "AC") {
     resetVar();
@@ -134,6 +178,7 @@ function updateVar(input) {
     operated = false; // Flag to false, so second number can be filled
     return "unchanged";
   }
+  // Operate
   else if (input === "=") {
     operate(op);
     op = "", num2 = ""; // Reset the operator, and num2
@@ -147,7 +192,13 @@ const buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     // Get what to be displayed from the update function;
-    let toDisplay = updateVar(button.name);
+    toDisplay = updateVar(button.name);
+    // Insert snapshot of current configuration
+    if (!restored) {
+      var snapshot = new Snap(num1, num2, op, operated, dotted, toDisplay);
+      snapshots.push(snapshot);
+    }
+    restored = false;
     updateDisplay(toDisplay);
   })
 })
