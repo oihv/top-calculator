@@ -11,17 +11,18 @@ function updateDisplay(toDisplay) {
 }
 
 var num1 = "", num2 = "", op = "";
-var operated = false;
+var operated = false; // flag to check whether or not operation has been made
+var operatorOn = false; // flag to check whether there's operator in the buffer
 var dotted = false;
 var toDisplay;
 var restored = false;
 
 class Snap {
-  constructor(num1, num2, op, operated, dotted, toDisplay) {
+  constructor(num1, num2, op, operatorOn, dotted, toDisplay) {
     this.num1 = num1;
     this.num2 = num2;
     this.op = op;
-    this.operated = operated;
+    this.operatorOn = operatorOn;
     this.dotted = dotted;
     this.toDisplay = toDisplay;
   }
@@ -30,7 +31,7 @@ class Snap {
 var snapshots = [];
 function restoreSnap() {
   tempDot = dotted;
-  tempOp = operated;
+  tempOp = operatorOn;
   let index = snapshots.length - 2;
   if (index < 0) {
     resetVar();
@@ -40,22 +41,40 @@ function restoreSnap() {
   num1 = snapshots[index].num1;
   num2 = snapshots[index].num2;
   op = snapshots[index].op;
-  operated = snapshots[index].operated;
+  operatorOn = snapshots[index].operatorOn;
   dotted = snapshots[index].dotted;
   toDisplay = snapshots[index].toDisplay;
+  if (toDisplay === "unchanged") // When operator was sent, revert to the previous index instead
+    toDisplay = snapshots[index - 1].toDisplay;
   // Remove the last snapshot;
   snapshots.pop();
-  // If buttons that relates to UI change, changed adjust
+  // If buttons that relates to UI change, adjust
   if (tempDot === false && dotted === true) darkenDot();
   else if (tempDot === true && dotted === false) lightenDot();
-  if (tempOp === false && operated === true) darkenOp();
-  else if (tempOp === true && operated === false) lightenOp();
+  if (tempOp === false && operatorOn === true) darkenOp();
+  else if (tempOp === true && operatorOn === false) lightenOp();
 }
 
 function resetVar() {
   num1 = "", num2 = "", op = "";
-  lightenOp();
-  lightenDot();
+
+  if (operatorOn) {
+    lightenOp();
+    operatorOn = false;
+  }
+  if (dotted) {
+    lightenDot();
+    dotted = false;
+  }
+}
+
+function resetSnap() {
+  snapshots = [];
+}
+
+function resetAll() {
+  resetVar();
+  resetSnap();
 }
 
 // Function to darken the button when the operator is selected
@@ -76,10 +95,12 @@ function darkenOp(op) {
       break;
   }
   target.classList.add("darken");
+  operatorOn = true;
 }
 
 function lightenOp() {
   target.classList.remove("darken");
+  operatorOn = false;
 }
 
 function addDot(num) {
@@ -161,9 +182,9 @@ function updateVar(input) {
     restored = true;
     return toDisplay;
   }
-  // Reset all var
+  // Reset all
   else if (input === "AC") {
-    resetVar();
+    resetAll();
     return num1;
   }
   // Update op
@@ -195,9 +216,10 @@ buttons.forEach((button) => {
     toDisplay = updateVar(button.name);
     // Insert snapshot of current configuration
     if (!restored) {
-      var snapshot = new Snap(num1, num2, op, operated, dotted, toDisplay);
+      var snapshot = new Snap(num1, num2, op, operatorOn, dotted, toDisplay);
       snapshots.push(snapshot);
     }
+    console.log(snapshots);
     restored = false;
     updateDisplay(toDisplay);
   })
