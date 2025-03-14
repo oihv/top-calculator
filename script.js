@@ -35,8 +35,10 @@ function restoreSnap() {
   let index = snapshots.length - 2;
   if (index < 0) {
     resetVar();
+    updateDisplay();
+    if (snapshots.length) snapshots.pop();
     return;
-  } 
+  }
   // Revert the variables
   num1 = snapshots[index].num1;
   num2 = snapshots[index].num2;
@@ -57,6 +59,7 @@ function restoreSnap() {
 
 function resetVar() {
   num1 = "", num2 = "", op = "";
+  toDisplay = "";
 
   if (operatorOn) {
     lightenOp();
@@ -210,18 +213,53 @@ function updateVar(input) {
 
 const buttons = document.querySelectorAll("button");
 
+function handleInput() {
+  // Insert snapshot of current configuration
+  if (!restored) {
+    var snapshot = new Snap(num1, num2, op, operatorOn, dotted, toDisplay);
+    snapshots.push(snapshot);
+  }
+  console.log(snapshots);
+  restored = false;
+  updateDisplay(toDisplay);
+}
+
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     // Get what to be displayed from the update function;
     toDisplay = updateVar(button.name);
-    // Insert snapshot of current configuration
-    if (!restored) {
-      var snapshot = new Snap(num1, num2, op, operatorOn, dotted, toDisplay);
-      snapshots.push(snapshot);
-    }
-    console.log(snapshots);
-    restored = false;
-    updateDisplay(toDisplay);
-  })
-})
+    handleInput();
+  });
+});
 
+document.addEventListener('keydown', (e) => {
+  switch (e.key) {
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+    case "8":
+    case "9":
+    case "0":
+    case ".":
+    case "+":
+    case "-":
+    case "*":
+    case "/":
+    case "=":
+      toDisplay = updateVar(e.key);
+      handleInput();
+      break;
+    case "Backspace":
+      toDisplay = updateVar("backspace");
+      handleInput();
+      break;
+    case "Enter":
+      toDisplay = updateVar("=");
+      handleInput();
+      break;
+  }
+})
